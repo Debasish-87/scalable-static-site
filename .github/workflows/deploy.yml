@@ -24,8 +24,9 @@ jobs:
           AWS_REGION: ${{ secrets.AWS_REGION }}
           SOURCE_DIR: static-site
 
-      - name: Purge Cloudflare cache
-        uses: nathanvaughn/actions-cloudflare-purge@v1.2.0
-        with:
-          zone: ${{ secrets.CLOUDFLARE_ZONE_ID }}
-          token: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      - name: Purge Cloudflare cache manually
+        run: |
+          curl -X POST "https://api.cloudflare.com/client/v4/zones/${{ secrets.CLOUDFLARE_ZONE_ID }}/purge_cache" \
+            -H "Authorization: Bearer ${{ secrets.CLOUDFLARE_API_TOKEN }}" \
+            -H "Content-Type: application/json" \
+            --data '{"purge_everything":true}'
