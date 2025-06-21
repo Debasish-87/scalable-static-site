@@ -1,0 +1,33 @@
+name: Deploy Static Website
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  deploy:
+    name: Sync Static Site to S3 + Purge Cloudflare
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v3
+
+      - name: Sync static-site/ to S3
+        uses: jakejarvis/s3-sync-action@master
+        with:
+          args: --delete
+        env:
+          AWS_S3_BUCKET: yourdomain.com
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: us-east-1
+          SOURCE_DIR: static-site
+
+      - name: Purge Cloudflare cache
+        uses: jakejarvis/cloudflare-purge-action@v1
+        env:
+          CLOUDFLARE_ZONE_ID: ${{ secrets.CLOUDFLARE_ZONE_ID }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+
+          
