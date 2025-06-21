@@ -18,14 +18,14 @@ jobs:
         with:
           args: --delete
         env:
-          AWS_S3_BUCKET: scalable-static-site.com         # replace if needed
+          AWS_S3_BUCKET: ${{ secrets.S3_BUCKET }}
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_REGION: ${{ secrets.AWS_REGION }}
-          SOURCE_DIR: static-site                         # your static files should be here
+          SOURCE_DIR: static-site
 
       - name: Purge Cloudflare cache
-        uses: mathielo/cloudflare-cache-action@v1        # ✅ working purge action
+        uses: nathanvaughn/actions-cloudflare-purge@v3
         with:
-          token: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           zone: ${{ secrets.CLOUDFLARE_ZONE_ID }}
+          token: ${{ secrets.CLOUDFLARE_API_TOKEN }}
