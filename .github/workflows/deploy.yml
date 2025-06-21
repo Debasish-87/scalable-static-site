@@ -25,7 +25,7 @@ jobs:
           SOURCE_DIR: static-site
 
       - name: Purge Cloudflare cache
-        uses: nathanvaughn/actions-cloudflare-purge@v3
+        uses: nathanvaughn/actions-cloudflare-purge@v1.2.0
         with:
           zone: ${{ secrets.CLOUDFLARE_ZONE_ID }}
           token: ${{ secrets.CLOUDFLARE_API_TOKEN }}
